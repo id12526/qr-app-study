@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <!-- Верхнее меню с кнопкой "Назад" и текстом -->
+    <LinearLayout
+        android:id="@+id/top_menu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_back_arrow_black"
+            android:contentDescription="Back button"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/itemName2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сведения"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="12dp" />
+    </LinearLayout>
+
+    <!-- Основная часть с элементами -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/top_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:dividerPadding="8dp">
+
+            <!-- Название объекта -->
+            <TextView
+                android:id="@+id/itemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="16dp"
+                android:textIsSelectable="true"
+                android:gravity="center_horizontal" />
+
+            <!-- Описание объекта -->
+            <TextView
+                android:id="@+id/itemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="16dp"
+                android:textIsSelectable="true"
+                android:textColor="@color/black" />
+
+            <!-- Цена объекта -->
+            <TextView
+                android:id="@+id/itemId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:layout_marginBottom="16dp" />
+
+            <!-- QR-код -->
+            <TextView
+                android:id="@+id/itemQr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textIsSelectable="true"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Дополнительные элементы: кнопка "Показать QR-код" -->
+            <Button
+                android:id="@+id/showQrButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ПОКАЗАТЬ QR-КОД"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/black"
+                android:layout_marginTop="16dp"
+                app:cornerRadius="30dp" />
+
+            <Button
+                android:id="@+id/export_pdf_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ЭКСПОРТИРОВАТЬ В PDF"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/black"
+                android:layout_marginTop="7dp"
+                app:cornerRadius="30dp" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

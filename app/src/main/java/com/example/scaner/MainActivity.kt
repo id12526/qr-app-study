@@ -1,0 +1,108 @@
+package com.example.scaner
+
+import android.content.Intent
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.ImageButton
+import com.bumptech.glide.Glide
+import com.example.scaner.databinding.ActivityMainBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var currentUid: String
+    private var avatarUrl: String? = null
+    private var role: String? = null
+    private lateinit var sharedPreferences: SharedPreferences
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Инициализация SharedPreferences
+        sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
+
+        // Настройка цветов статус-бара и навигационной панели
+        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.navigationBarColor = resources.getColor(android.R.color.white, theme)
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                )
+
+        // Получаем данные из Intent
+        currentUid = intent.getStringExtra("UID") ?: ""
+        role = intent.getStringExtra("ROLE")
+        avatarUrl = intent.getStringExtra("AVATAR_URL")
+
+        Log.d("MainActivity", "Текущий UID: $currentUid")
+        Log.d("MainActivity", "Роль: $role")
+        Log.d("MainActivity", "URL аватарки: $avatarUrl")
+
+        // Проверяем роль пользователя
+        if (role != "admin") {
+            binding.mainAdmin.visibility = View.GONE // Скрываем кнопку ADMIN PANEL
+        }
+
+        // Загрузка аватарки
+        if (!avatarUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(avatarUrl)
+                .placeholder(R.drawable.circle_background)
+                .error(R.drawable.error_avatar)
+                .circleCrop()
+                .into(binding.avatarImage)
+        } else {
+            Glide.with(this)
+                .load(R.drawable.default_avatar)
+                .circleCrop()
+                .into(binding.avatarImage)
+        }
+
+        // Логика кнопок
+        binding.mainCategory.setOnClickListener {
+            val intent = Intent(this@MainActivity, CategoryActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.mainOpenScanner.setOnClickListener {
+            val intent = Intent(this@MainActivity, ScannerActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.mainAdmin.setOnClickListener {
+            val intent = Intent(this@MainActivity, AdminActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Переход на страницу профиля
+        binding.avatarImage.setOnClickListener {
+            val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+            intent.putExtra("UID", currentUid)
+            intent.putExtra("AVATAR_URL", avatarUrl)
+            startActivity(intent)
+        }
+
+        // Кнопка "Назад" (возврат к авторизации)
+        val backButton = findViewById<ImageButton>(R.id.back_button)
+        backButton.setOnClickListener {
+            clearUserData()
+            val intent = Intent(this@MainActivity, AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun clearUserData() {
+        val editor = sharedPreferences.edit()
+        editor.remove("LOGIN")
+        editor.remove("PASSWORD")
+        editor.apply()
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "671266622182",
+    "firebase_url": "https://scaner-842a5-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "scaner-842a5",
+    "storage_bucket": "scaner-842a5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671266622182:android:60c7654161c3d45595c927",
+        "android_client_info": {
+          "package_name": "com.example.scaner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9GZV8n_vy3kkEZCpEaY--NN021s3J5tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

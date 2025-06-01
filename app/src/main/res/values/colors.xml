@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#88A2DE</color>
+    <color name="gray">#424242</color>
+    <color name="red">#801F1F</color>
+    <color name="light_gray">#6A6A6A</color>
+    <color name="placeholder_color">#D3D3D3</color>
+    <color name="error_color">#FF0000</color>
+    <color name="popUp">#666666</color>
+    <color name="link_blue">#0F7BDC</color>
+    <color name="like_hint">#B4B4B4</color>
+</resources>

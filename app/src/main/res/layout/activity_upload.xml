@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".UploadActivity">
+
+    <!-- Обертка ScrollView для содержимого -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Верхнее меню с кнопкой "Назад" и текстом -->
+            <LinearLayout
+                android:id="@+id/top_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="8dp"
+                android:elevation="4dp">
+
+                <ImageButton
+                    android:id="@+id/back_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_back_arrow_black"
+                    android:contentDescription="Back button"
+                    android:elevation="4dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Добавление данных"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center_vertical"
+                    android:paddingStart="12dp" />
+            </LinearLayout>
+
+            <!-- Основная часть с полями -->
+            <LinearLayout
+                android:id="@+id/form_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Категория"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_gray"
+                    android:paddingBottom="4dp" />
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Выберите категорию"
+                    android:background="@drawable/butt_border"
+                    app:popupTheme="@style/SpinnerPopupTheme"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Название"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_gray"
+                    android:paddingBottom="4dp" />
+                <EditText
+                    android:id="@+id/uploadName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/butt_border"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Введите название"
+                    android:gravity="start|center_vertical"
+                    android:padding="16dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Описание"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_gray"
+                    android:paddingBottom="4dp" />
+                <EditText
+                    android:id="@+id/uploadDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="1"
+                    android:scrollbars="vertical"
+                    android:maxLines="5"
+                    android:background="@drawable/butt_border"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Введите описание"
+                    android:gravity="start|center_vertical"
+                    android:padding="16dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Серийный номер"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_gray"
+                    android:paddingBottom="4dp" />
+                <EditText
+                    android:id="@+id/uploadId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/butt_border"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Введите серийный номер"
+                    android:gravity="start|center_vertical"
+                    android:padding="16dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Значение QR-кода"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_gray"
+                    android:paddingBottom="4dp" />
+                <EditText
+                    android:id="@+id/uploadQr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/butt_border"
+                    android:layout_marginBottom="110dp"
+                    android:hint="Введите код"
+                    android:gravity="start|center_vertical"
+                    android:padding="16dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Кнопка внизу -->
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="СОХРАНИТЬ"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            app:cornerRadius="30dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
