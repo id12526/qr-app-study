@@ -5,7 +5,7 @@
             <objectAnimator
                 android:propertyName="textColor"
                 android:duration="300"
-                android:valueFrom="@color/link_state"
+                android:valueFrom="@color/white"
                 android:valueTo="@color/link_press"
                 android:valueType="colorType" />
         </set>
@@ -18,7 +18,7 @@
                 android:propertyName="textColor"
                 android:duration="300"
                 android:valueFrom="@color/link_press"
-                android:valueTo="@color/link_state"
+                android:valueTo="@color/white"
                 android:valueType="colorType" />
         </set>
     </item>

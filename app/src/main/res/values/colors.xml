@@ -15,6 +15,6 @@
     <color name="light_accent">#EFF2F8</color>
     <color name="gradient_1">#4A90E2</color>
     <color name="gradient_2">#5DADE2</color>
-    <color name="link_state">#4A90E2</color>
+    <color name="link_state">#B4B4B4</color>
     <color name="link_press">#355C92</color>
 </resources>

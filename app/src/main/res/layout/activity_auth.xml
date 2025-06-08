@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <View
+        android:id="@+id/blue_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_gradient"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="parent" />
+
     <!-- Надпись "Авторизация" -->
     <TextView
         android:id="@+id/auth_title"
@@ -15,8 +23,9 @@
         android:text="Авторизация"
         android:textSize="34sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:gravity="center"
+        android:elevation="2dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +134,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="20dp"
-        android:background="@color/white"
+        android:background="@null"
         android:gravity="center"
         android:layout_marginBottom="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +147,8 @@
             android:layout_height="wrap_content"
             android:text="Еще нет аккаунта? "
             android:textSize="16sp"
-            android:textColor="@android:color/black"
+            android:elevation="2dp"
+            android:textColor="@android:color/white"
             android:gravity="center" />
 
         <!-- Кликабельный текст -->
@@ -151,10 +161,11 @@
             android:focusable="true"
             android:gravity="center"
             android:minHeight="48dp"
-            android:text="Зарегистрируйтесь."
-            android:textColor="@color/link_state"
-            android:textSize="16sp"
+            android:elevation="2dp"
+            android:text="@string/underline_text"
+            android:textColor="@color/white"
             android:textStyle="bold"
+            android:textSize="16sp"
             android:stateListAnimator="@animator/link_reg_animator" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

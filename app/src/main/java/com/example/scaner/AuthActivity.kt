@@ -33,8 +33,8 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Настройка цветов статус-бара и навигационной панели
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
-        window.navigationBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_2, theme)
+        window.navigationBarColor = resources.getColor(R.color.gradient_1, theme)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
@@ -67,6 +67,9 @@ class AuthActivity : AppCompatActivity() {
             binding.pass.setText(savedPassword)
             binding.rememberMe.isChecked = true
         }
+
+        setupFocusChange(findViewById(R.id.login), R.drawable.ic_person_gradient, R.drawable.ic_person)
+        setupFocusChange(findViewById(R.id.pass), R.drawable.ic_password_gradient, R.drawable.ic_password)
 
         // Настройка EditText для пароля
         val passwordInput = findViewById<EditText>(R.id.pass)
@@ -102,6 +105,24 @@ class AuthActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Введите логин и пароль", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun setupFocusChange(editText: EditText, focusedDrawableRes: Int, defaultDrawableRes: Int) {
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            // Получаем текущие compoundDrawables
+            val currentDrawables = editText.compoundDrawables
+
+            // Определяем новую левую иконку в зависимости от фокуса
+            val newLeftDrawable = ContextCompat.getDrawable(this, if (hasFocus) focusedDrawableRes else defaultDrawableRes)?.mutate()
+
+            // Устанавливаем новые compoundDrawables, сохраняя правую иконку (глаз)
+            editText.setCompoundDrawablesWithIntrinsicBounds(
+                newLeftDrawable, // Левая иконка
+                currentDrawables[1], // Верхняя иконка (если есть)
+                currentDrawables[2], // Правая иконка (глаз)
+                currentDrawables[3]  // Нижняя иконка (если есть)
+            )
         }
     }
 
