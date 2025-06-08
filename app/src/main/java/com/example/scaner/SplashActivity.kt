@@ -17,7 +17,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // Настройка цветов статус-бара и навигационной панели
         window.statusBarColor = resources.getColor(android.R.color.white, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (

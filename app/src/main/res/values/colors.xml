@@ -11,4 +11,7 @@
     <color name="popUp">#666666</color>
     <color name="link_blue">#0F7BDC</color>
     <color name="like_hint">#B4B4B4</color>
+    <color name="accent">#4968D0</color>
+    <color name="dark_accent">#294597</color>
+    <color name="light_accent">#EFF2F8</color>
 </resources>

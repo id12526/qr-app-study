@@ -1,6 +1,7 @@
 package com.example.scaner
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.text.method.PasswordTransformationMethod
@@ -10,11 +11,13 @@ import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.scaner.databinding.ActivityAuthBinding
 import com.google.firebase.database.*
 
@@ -37,10 +40,24 @@ class AuthActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
+        val rootLayout = findViewById<View>(R.id.root_layout)
+
+        rootLayout.setOnClickListener {
+            // Снимаем фокус с EditText
+            currentFocus?.let { view ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                view.clearFocus()
+            }
+        }
+
         // Инициализация SharedPreferences
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
         val rememberMeCheckBox = findViewById<CheckBox>(R.id.remember_me)
-        rememberMeCheckBox.buttonTintList = ColorStateList.valueOf(Color.BLACK) // Устанавливаем черный цвет
+
+        rememberMeCheckBox.buttonTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(this, R.color.dark_accent)
+        )
 
         // Проверка сохраненных данных
         val savedLogin = sharedPreferences.getString("LOGIN", "")
@@ -49,12 +66,6 @@ class AuthActivity : AppCompatActivity() {
             binding.login.setText(savedLogin)
             binding.pass.setText(savedPassword)
             binding.rememberMe.isChecked = true
-        }
-
-        // Настройка кнопки "Назад"
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
-            finish()
         }
 
         // Настройка EditText для пароля
