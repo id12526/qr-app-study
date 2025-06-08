@@ -1,0 +1,25 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Анимация при нажатии -->
+    <item android:state_pressed="true">
+        <set>
+            <objectAnimator
+                android:propertyName="textColor"
+                android:duration="300"
+                android:valueFrom="@color/link_state"
+                android:valueTo="@color/link_press"
+                android:valueType="colorType" />
+        </set>
+    </item>
+
+    <!-- Возвращение к исходному состоянию -->
+    <item>
+        <set>
+            <objectAnimator
+                android:propertyName="textColor"
+                android:duration="300"
+                android:valueFrom="@color/link_press"
+                android:valueTo="@color/link_state"
+                android:valueType="colorType" />
+        </set>
+    </item>
+</selector>

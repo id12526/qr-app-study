@@ -56,7 +56,7 @@ class AuthActivity : AppCompatActivity() {
         val rememberMeCheckBox = findViewById<CheckBox>(R.id.remember_me)
 
         rememberMeCheckBox.buttonTintList = ColorStateList.valueOf(
-            ContextCompat.getColor(this, R.color.dark_accent)
+            ContextCompat.getColor(this, R.color.gradient_1)
         )
 
         // Проверка сохраненных данных

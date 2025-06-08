@@ -9,9 +9,12 @@
     <color name="placeholder_color">#D3D3D3</color>
     <color name="error_color">#FF0000</color>
     <color name="popUp">#666666</color>
-    <color name="link_blue">#0F7BDC</color>
     <color name="like_hint">#B4B4B4</color>
     <color name="accent">#4968D0</color>
     <color name="dark_accent">#294597</color>
     <color name="light_accent">#EFF2F8</color>
+    <color name="gradient_1">#4A90E2</color>
+    <color name="gradient_2">#5DADE2</color>
+    <color name="link_state">#4A90E2</color>
+    <color name="link_press">#355C92</color>
 </resources>
