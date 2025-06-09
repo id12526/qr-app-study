@@ -1,0 +1,17 @@
+<!-- res/drawable/circle_background_with_border.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Внешняя обводка -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/gradient_1" /> <!-- Цвет обводки (белый) -->
+            <size android:width="52dp" android:height="52dp" /> <!-- Размер немного больше ImageView -->
+        </shape>
+    </item>
+
+    <!-- Внутренний круг (основной фон) -->
+    <item android:left="2dp" android:right="2dp" android:top="2dp" android:bottom="2dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/white" /> <!-- Цвет фона аватара -->
+        </shape>
+    </item>
+</layer-list>

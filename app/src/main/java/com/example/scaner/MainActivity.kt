@@ -9,8 +9,6 @@ import android.view.View
 import android.widget.ImageButton
 import com.bumptech.glide.Glide
 import com.example.scaner.databinding.ActivityMainBinding
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
 
         // Настройка цветов статус-бара и навигационной панели
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
