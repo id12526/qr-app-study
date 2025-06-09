@@ -1,53 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
+    android:background="@android:color/white">
 
-    <!-- Верхнее меню с кнопкой "Назад" и текстом -->
-    <LinearLayout
-        android:id="@+id/top_menu"
+    <!-- Градиентный фон -->
+    <View
+        android:id="@+id/blue_background"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@drawable/main_gradient_inverse"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="185dp"
+        android:background="@drawable/gradient_mask"
+        app:layout_constraintTop_toBottomOf="@id/blue_background"
+        app:layout_constraintTop_toTopOf="@id/top_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Верхняя панель с CardView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/top_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
-        android:elevation="4dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_back_arrow_black"
-            android:contentDescription="Back button"
-            android:elevation="4dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:layout_gravity="center_vertical" />
+        <LinearLayout
+            android:id="@+id/top_menu"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:elevation="4dp">
 
-        <TextView
-            android:id="@+id/categoryTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Категория"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="12dp" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back_arrow_black"
+                android:contentDescription="Back button"
+                android:elevation="4dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/categoryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Категория"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/gradient_1"
+                android:layout_gravity="center_vertical"
+                android:elevation="4dp" />
+
+            <ImageButton
+                android:id="@+id/icNull"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:src="@drawable/ic_null"
+                android:contentDescription="null"
+                android:layout_gravity="center_vertical"
+                android:scaleType="center"
+                android:elevation="4dp"
+                android:adjustViewBounds="true" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- Основная часть с элементами -->
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/top_menu"
+        android:layout_margin="1dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        app:layout_constraintTop_toBottomOf="@id/top_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -57,21 +106,32 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edittext_background"
+            android:layout_marginBottom="20dp"
             android:hint="Поиск..."
-            android:inputType="text"
-            android:padding="16dp"
+            android:gravity="start|center_vertical"
+            android:padding="14dp"
             android:maxLines="1"
             android:singleLine="true"
-            android:background="@drawable/butt_border"
-            android:layout_marginBottom="16dp" />
+            android:elevation="2dp"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"
+            android:stateListAnimator="@animator/edittext_focus_animator" />
 
         <!-- Список компонентов -->
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="1dp" />
+            android:divider="@drawable/divider"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="17dp"
+            android:dividerHeight="1dp"
+            android:focusableInTouchMode="true" />
 
         <!-- Сообщение, когда нет результатов -->
         <TextView
@@ -85,5 +145,4 @@
             android:visibility="gone" /> <!-- Скрываем по умолчанию -->
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

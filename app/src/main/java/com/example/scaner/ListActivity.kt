@@ -1,17 +1,21 @@
 package com.example.scaner
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.scaner.databinding.ActivityListBinding
 import com.google.firebase.database.*
 
@@ -30,7 +34,7 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Настройка цветов статус-бара и навигационной панели
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
@@ -41,6 +45,26 @@ class ListActivity : AppCompatActivity() {
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             finish()
+        }
+
+        setupFocusChange(findViewById(R.id.searchEditText), R.drawable.ic_search_gradient, R.drawable.ic_search)
+
+        val rootLayout = findViewById<View>(R.id.root_layout)
+        val listView = findViewById<ListView>(R.id.listView)
+
+        rootLayout.setOnClickListener {
+            // Снимаем фокус с EditText
+            currentFocus?.let { view ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                view.clearFocus()
+            }
+        }
+
+        listView.setOnTouchListener { _, _ ->
+            // Передаем клик на root_layout
+            rootLayout.performClick()
+            false // Возвращаем false, чтобы ListView продолжал обрабатывать свои события
         }
 
         // Получаем название категории из Intent
@@ -93,6 +117,24 @@ class ListActivity : AppCompatActivity() {
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val selectedItem = productList[position]
             navigateToDetailActivity(selectedItem)
+        }
+    }
+
+    private fun setupFocusChange(editText: EditText, focusedDrawableRes: Int, defaultDrawableRes: Int) {
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            // Получаем текущие compoundDrawables
+            val currentDrawables = editText.compoundDrawables
+
+            // Определяем новую левую иконку в зависимости от фокуса
+            val newLeftDrawable = ContextCompat.getDrawable(this, if (hasFocus) focusedDrawableRes else defaultDrawableRes)?.mutate()
+
+            // Устанавливаем новые compoundDrawables, сохраняя правую иконку (глаз)
+            editText.setCompoundDrawablesWithIntrinsicBounds(
+                newLeftDrawable, // Левая иконка
+                currentDrawables[1], // Верхняя иконка (если есть)
+                currentDrawables[2], // Правая иконка (глаз)
+                currentDrawables[3]  // Нижняя иконка (если есть)
+            )
         }
     }
 
