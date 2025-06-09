@@ -13,7 +13,7 @@
                 </shape>
             </item>
             <!-- Галочка -->
-            <item android:drawable="@drawable/ic_check_mark" android:gravity="center" />
+            <item android:drawable="@drawable/ic_check_done" android:gravity="center" />
         </layer-list>
     </item>
 

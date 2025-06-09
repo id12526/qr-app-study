@@ -41,7 +41,6 @@ class AuthActivity : AppCompatActivity() {
                 )
 
         val rootLayout = findViewById<View>(R.id.root_layout)
-
         rootLayout.setOnClickListener {
             // Снимаем фокус с EditText
             currentFocus?.let { view ->

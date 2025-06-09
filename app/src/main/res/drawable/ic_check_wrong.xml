@@ -5,16 +5,16 @@
     android:viewportWidth="960"
     android:viewportHeight="960">
   <path
-      android:pathData="M382,720 L154,492l57,-57 171,171 367,-367 57,57 -424,424Z">
-    <aapt:attr name="android:fillColor">
+      android:pathData="m256,760 l-56,-56 224,-224 -224,-224 56,-56 224,224 224,-224 56,56 -224,224 224,224 -56,56 -224,-224 -224,224Z" >
+      <aapt:attr name="android:fillColor">
       <gradient
           android:type="linear"
           android:startX="0"
           android:startY="0"
           android:endX="960"
           android:endY="960"
-          android:startColor="#4A90E2"
-          android:endColor="#5DADE2" />
-    </aapt:attr>
+          android:startColor="#E24A4A"
+          android:endColor="#870F0F" />
+      </aapt:attr>
   </path>
 </vector>
