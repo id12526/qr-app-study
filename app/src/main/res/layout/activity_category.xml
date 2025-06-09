@@ -2,51 +2,98 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@android:color/white">
 
-    <!-- Верхнее меню с кнопкой "Назад" и текстом -->
-    <LinearLayout
-        android:id="@+id/top_menu"
+    <!-- Градиентный фон -->
+    <View
+        android:id="@+id/blue_background"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@drawable/main_gradient_inverse"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="185dp"
+        android:background="@drawable/gradient_mask"
+        app:layout_constraintTop_toBottomOf="@id/blue_background"
+        app:layout_constraintTop_toTopOf="@id/top_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Верхняя панель с CardView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/top_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
-        android:elevation="4dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_back_arrow_black"
-            android:contentDescription="Back button"
-            android:elevation="4dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:layout_gravity="center_vertical" />
+        <LinearLayout
+            android:id="@+id/top_menu"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:elevation="4dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Категории"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="12dp" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back_arrow_black"
+                android:contentDescription="Back button"
+                android:elevation="4dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Категории"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/gradient_1"
+                android:layout_gravity="center_vertical"
+                android:elevation="4dp" />
+
+            <ImageButton
+                android:id="@+id/icNull"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:src="@drawable/ic_null"
+                android:contentDescription="null"
+                android:layout_gravity="center_vertical"
+                android:scaleType="center"
+                android:elevation="4dp"
+                android:adjustViewBounds="true" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- ScrollView для блока кнопок -->
     <ScrollView
         android:id="@+id/scroll_buttons"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/top_menu"
+        app:layout_constraintTop_toBottomOf="@id/top_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -56,99 +103,121 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:padding="20dp"
             android:gravity="center_horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/screenCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="МОНИТОРЫ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Мониторы"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/keyboardCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="КЛАВИАТУРЫ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Клавиатуры"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/mouseCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="МЫШИ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Мыши"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/unitCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="СИСТЕМНЫЕ БЛОКИ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Системные блоки"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chairCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="СТУЛЬЯ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Стулья"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/tableCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="СТОЛЫ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Столы"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/cableCategory"
+                android:layerType="software"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="УДЛИНИТЕЛИ"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:layout_marginBottom="20dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                app:cornerRadius="30dp" />
+                android:text="Удлинители"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:elevation="4dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
 
         </LinearLayout>
     </ScrollView>
