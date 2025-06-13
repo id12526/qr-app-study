@@ -24,23 +24,18 @@ class SplashActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        // Инициализация SharedPreferences
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
 
-        // Проверка сохраненных данных
         val savedLogin = sharedPreferences.getString("LOGIN", "")
         val savedPassword = sharedPreferences.getString("PASSWORD", "")
 
-        // Задержка для демонстрации загрузки
         Handler(Looper.getMainLooper()).postDelayed({
             if (!savedLogin.isNullOrEmpty() && !savedPassword.isNullOrEmpty()) {
-                // Если данные сохранены, проверяем их в базе данных
                 checkSavedCredentials(savedLogin, savedPassword)
             } else {
-                // Если данных нет, переходим на экран авторизации
                 navigateToAuthActivity()
             }
-        }, 1000) // delay
+        }, 1000)
     }
 
     private fun checkSavedCredentials(login: String, password: String) {
@@ -55,11 +50,10 @@ class SplashActivity : AppCompatActivity() {
                         val avatarUrl = userSnapshot.child("avatarUrl").value
 
                         if (storedPassword.toString() == password) {
-                            // Переход на MainActivity с данными пользователя
                             val intent = Intent(this@SplashActivity, MainActivity::class.java).apply {
                                 putExtra("ROLE", role.toString())
                                 putExtra("AVATAR_URL", avatarUrl?.toString())
-                                putExtra("UID", uid) // Передаем UID вместо логина
+                                putExtra("UID", uid)
                             }
                             startActivity(intent)
                             finish()
@@ -67,12 +61,10 @@ class SplashActivity : AppCompatActivity() {
                         }
                     }
                 }
-                // Если данные неверны, переходим на экран авторизации
                 navigateToAuthActivity()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Если произошла ошибка, переходим на экран авторизации
                 navigateToAuthActivity()
             }
         })

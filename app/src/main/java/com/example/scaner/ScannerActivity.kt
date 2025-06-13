@@ -65,15 +65,15 @@ class ScannerActivity : AppCompatActivity() {
                 databaseReference.get().addOnSuccessListener { snapshot ->
                     var productFound = false
 
-                    for (category in snapshot.children) { // Категории
-                        for (productSnapshot in category.children) { // Продукты внутри категории
+                    for (category in snapshot.children) {
+                        for (productSnapshot in category.children) {
                             val qr = productSnapshot.child("qr").value?.toString()
                             if (qr == qrCode) {
                                 val itemName = productSnapshot.child("name").value?.toString()
 
                                 val intent = Intent(this@ScannerActivity, ListDetailActivity::class.java)
-                                intent.putExtra("ITEM_NAME", itemName) // Передаем ITEM_NAME
-                                intent.putExtra("CATEGORY_NAME", category.key) // Передаем CATEGORY_NAME (ключ категории)
+                                intent.putExtra("ITEM_NAME", itemName)
+                                intent.putExtra("CATEGORY_NAME", category.key) 
                                 startActivity(intent)
 
                                 productFound = true

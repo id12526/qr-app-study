@@ -1,11 +1,13 @@
 package com.example.scaner
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.scaner.databinding.ActivityProfileEditBinding
@@ -15,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 class ProfileEditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileEditBinding
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var currentUid: String // UID пользователя вместо логина
+    private lateinit var currentUid: String
     private var avatarUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,36 +25,39 @@ class ProfileEditActivity : AppCompatActivity() {
         binding = ActivityProfileEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Настройка цветов статус-бара и навигационной панели
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        // Получаем данные из Intent
         currentUid = intent.getStringExtra("UID") ?: ""
         avatarUrl = intent.getStringExtra("AVATAR_URL")
         Log.d("ProfileEditActivity", "Текущий UID: $currentUid")
         Log.d("ProfileEditActivity", "URL аватарки: $avatarUrl")
 
-        // Настройка верхнего бара
         binding.backButton.setOnClickListener {
             finish()
         }
 
-        // Загрузка аватарки
+        val rootLayout = findViewById<View>(R.id.root_layout)
+        rootLayout.setOnClickListener {
+            currentFocus?.let { view ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                view.clearFocus()
+            }
+        }
+
         loadAvatar()
 
-        // Обработка нажатия на кнопку "Изменить фото"
         binding.changeAvatarButton.setOnClickListener {
             showEditDialog("URL аватарки") { newAvatarUrl ->
                 updateAvatar(newAvatarUrl)
             }
         }
 
-        // Обработка нажатия на кнопку "Сохранить"
         binding.saveButton.setOnClickListener {
             val newLogin = binding.editLogin.text.toString().trim()
             val newPassword = binding.editPassword.text.toString().trim()
@@ -97,12 +102,11 @@ class ProfileEditActivity : AppCompatActivity() {
         if (!avatarUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(avatarUrl)
-                .placeholder(R.drawable.circle_background) // Заполнитель
-                .error(R.drawable.error_avatar) // Изображение при ошибке
+                .placeholder(R.drawable.circle_background)
+                .error(R.drawable.error_avatar)
                 .circleCrop()
                 .into(binding.avatarImage)
         } else {
-            // Если URL пустой, устанавливаем изображение по умолчанию
             Glide.with(this)
                 .load(R.drawable.default_avatar)
                 .circleCrop()
@@ -113,7 +117,6 @@ class ProfileEditActivity : AppCompatActivity() {
     private fun updateUserData(updatedData: Map<String, String>) {
         databaseReference = FirebaseDatabase.getInstance().getReference("Authorization")
 
-        // Обновляем данные пользователя в базе данных
         databaseReference.child(currentUid).updateChildren(updatedData)
             .addOnSuccessListener {
                 Log.d("ProfileEditActivity", "Данные успешно обновлены")
@@ -128,13 +131,11 @@ class ProfileEditActivity : AppCompatActivity() {
 
     private fun updateAvatar(newAvatarUrl: String) {
         databaseReference = FirebaseDatabase.getInstance().getReference("Authorization")
-
-        // Обновляем URL аватарки в базе данных
         databaseReference.child(currentUid).child("avatarUrl").setValue(newAvatarUrl)
             .addOnSuccessListener {
                 Log.d("ProfileEditActivity", "Аватарка успешно обновлена: $newAvatarUrl")
-                avatarUrl = newAvatarUrl // Обновляем URL аватарки
-                loadAvatar() // Перезагружаем аватарку
+                avatarUrl = newAvatarUrl 
+                loadAvatar()
                 Toast.makeText(this, "Аватарка успешно изменена", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {

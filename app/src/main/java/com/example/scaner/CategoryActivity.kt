@@ -27,7 +27,7 @@ class CategoryActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
-        // Устанавливаем обработчики кликов для каждой категории
+
         binding.screenCategory.setOnClickListener {
             navigateToListActivity("Мониторы")
         }
@@ -59,7 +59,7 @@ class CategoryActivity : AppCompatActivity() {
 
     private fun navigateToListActivity(categoryName: String) {
         val intent = Intent(this@CategoryActivity, ListActivity::class.java)
-        intent.putExtra("CATEGORY_NAME", categoryName) // Здесь добавляются корректные названия
+        intent.putExtra("CATEGORY_NAME", categoryName)
         startActivity(intent)
     }
 }

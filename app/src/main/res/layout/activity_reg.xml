@@ -60,6 +60,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
@@ -166,27 +168,20 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Кнопка регистрации -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/registerButton"
+                android:layerType="software"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="30dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/registerButton"
-                    android:layerType="software"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:text="Зарегистрироваться"
-                    android:textSize="22sp"
-                    android:textColor="@color/white"
-                    app:backgroundTint="@null"
-                    android:background="@drawable/button_gradient"
-                    android:gravity="center"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:stateListAnimator="@animator/button_scale_animator" />
-            </androidx.cardview.widget.CardView>
+                android:layout_height="80dp"
+                android:text="Зарегистрироваться"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_gradient"
+                android:gravity="center"
+                android:elevation="4dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/button_scale_animator" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

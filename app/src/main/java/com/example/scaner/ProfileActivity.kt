@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var currentUid: String // UID пользователя вместо логина
+    private lateinit var currentUid: String
     private var avatarUrl: String? = null
     private var firstName: String? = null
     private var lastName: String? = null
@@ -26,27 +26,27 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Настройка цветов статус-бара и навигационной панели
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        // Получаем данные из Intent
+
         currentUid = intent.getStringExtra("UID") ?: ""
         Log.d("ProfileActivity", "Текущий UID: $currentUid")
 
-        // Настройка верхнего бара
+
         binding.backButton.setOnClickListener {
             finish()
         }
 
-        // Загрузка данных пользователя
+
         loadUserData()
 
-        // Кнопка редактирования данных
+
         binding.editProfileButton.setOnClickListener {
             val intent = Intent(this, ProfileEditActivity::class.java).apply {
                 putExtra("UID", currentUid)
@@ -55,7 +55,7 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Кнопка удаления аккаунта
+
         binding.deleteAccountButton.setOnClickListener {
             showDeleteConfirmationDialog()
         }
@@ -71,7 +71,6 @@ class ProfileActivity : AppCompatActivity() {
                 login = snapshot.child("login").getValue(String::class.java)
                 avatarUrl = snapshot.child("avatarUrl").getValue(String::class.java)
 
-                // Отображение данных
                 binding.userName.text = "$lastName $firstName ${middleName ?: ""}".trim()
                 binding.userLogin.text = "@$login"
                 loadAvatar()
@@ -115,7 +114,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun deleteAccount() {
         databaseReference.removeValue().addOnSuccessListener {
             Log.d("ProfileActivity", "Аккаунт успешно удален")
-            finish() // Возвращаемся на предыдущий экран
+            finish() 
         }.addOnFailureListener {
             Log.e("ProfileActivity", "Ошибка при удалении аккаунта: ${it.message}")
         }

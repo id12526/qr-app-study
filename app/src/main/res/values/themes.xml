@@ -10,7 +10,7 @@
         <!-- Цвет фона Splash Screen -->
         <item name="windowSplashScreenBackground">@color/white</item>
         <!-- Иконка Splash Screen -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/qr_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="windowSplashScreenAnimationDuration">1000</item>
     </style>
     <style name="SpinnerPopupTheme" parent="Theme.AppCompat.Light.DarkActionBar">

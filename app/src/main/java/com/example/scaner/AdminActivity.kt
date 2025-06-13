@@ -14,7 +14,7 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
 
         window.decorView.systemUiVisibility = (

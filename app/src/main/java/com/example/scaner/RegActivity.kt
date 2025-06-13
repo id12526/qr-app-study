@@ -29,7 +29,6 @@ class RegActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Authorization")
 
-        // Настройка цветов статус-бара и навигационной панели
         window.statusBarColor = resources.getColor(R.color.gradient_2, theme)
         window.navigationBarColor = resources.getColor(R.color.gradient_1, theme)
         window.decorView.systemUiVisibility = (
@@ -37,7 +36,6 @@ class RegActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        // Настройка кнопки "Назад"
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             finish()
@@ -45,7 +43,6 @@ class RegActivity : AppCompatActivity() {
 
         val rootLayout = findViewById<View>(R.id.root_layout)
         rootLayout.setOnClickListener {
-            // Снимаем фокус с EditText
             currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -59,7 +56,6 @@ class RegActivity : AppCompatActivity() {
         setupFocusChange(findViewById(R.id.reg_lastName), R.drawable.ic_contact_gradient, R.drawable.ic_contact)
         setupFocusChange(findViewById(R.id.reg_middleName), R.drawable.ic_contact_gradient, R.drawable.ic_contact)
 
-        // Логика регистрации
         val regLogin = findViewById<EditText>(R.id.reg_login)
         val regPass = findViewById<EditText>(R.id.reg_pass)
         val regFirstName = findViewById<EditText>(R.id.reg_firstName)
@@ -89,11 +85,10 @@ class RegActivity : AppCompatActivity() {
                 if (password.isNotEmpty()) {
                     validatePassword(password)
                 } else {
-                    // Если поле пустое, убираем правую иконку
                     regPass.setCompoundDrawablesWithIntrinsicBounds(
-                        regPass.compoundDrawables[0], // Левая иконка
+                        regPass.compoundDrawables[0],
                         null,
-                        null, // Убираем правую иконку
+                        null,
                         null
                     )
                 }
@@ -110,11 +105,10 @@ class RegActivity : AppCompatActivity() {
                 if (login.isNotEmpty()) {
                     checkLoginAvailability(login)
                 } else {
-                    // Если поле пустое, устанавливаем ic_null
                     regLogin.setCompoundDrawablesWithIntrinsicBounds(
-                        regLogin.compoundDrawables[0], // Левая иконка
+                        regLogin.compoundDrawables[0],
                         null,
-                        ContextCompat.getDrawable(this@RegActivity, R.drawable.ic_null), // Правая иконка
+                        ContextCompat.getDrawable(this@RegActivity, R.drawable.ic_null),
                         null
                     )
                 }
@@ -128,7 +122,6 @@ class RegActivity : AppCompatActivity() {
     private var loginCheckRunnable: Runnable? = null
 
     private fun checkLoginAvailability(login: String) {
-        // Если логин пустой, устанавливаем ic_null
         if (login.isEmpty()) {
             val regLogin = findViewById<EditText>(R.id.reg_login)
             regLogin.setCompoundDrawablesWithIntrinsicBounds(
@@ -140,10 +133,8 @@ class RegActivity : AppCompatActivity() {
             return
         }
 
-        // Отменяем предыдущий запланированный запрос
         loginCheckRunnable?.let { handler.removeCallbacks(it) }
 
-        // Создаем новый запрос с задержкой
         loginCheckRunnable = Runnable {
             databaseReference.orderByChild("login").equalTo(login).get()
                 .addOnSuccessListener { snapshot ->
@@ -155,9 +146,9 @@ class RegActivity : AppCompatActivity() {
                         val currentDrawables = regLogin.compoundDrawables
                         if (currentDrawables != null && regLogin.text.toString().trim() == login) {
                             regLogin.setCompoundDrawablesWithIntrinsicBounds(
-                                currentDrawables[0], // Левая иконка
+                                currentDrawables[0],
                                 null,
-                                drawable, // Правая иконка
+                                drawable,
                                 null
                             )
                         }
@@ -170,7 +161,6 @@ class RegActivity : AppCompatActivity() {
                 }
         }
 
-        // Запускаем запрос через 300 мс
         handler.postDelayed(loginCheckRunnable!!, 300)
     }
 
@@ -188,88 +178,75 @@ class RegActivity : AppCompatActivity() {
         val currentDrawables = regPass.compoundDrawables
         if (currentDrawables != null) {
             regPass.setCompoundDrawablesWithIntrinsicBounds(
-                currentDrawables[0], // Левая иконка
+                currentDrawables[0],
                 null,
-                drawable, // Правая иконка
+                drawable,
                 null
             )
 
-            // Показываем подсказку, если иконка ic_check_wrong
             if (drawable?.constantState == ContextCompat.getDrawable(this@RegActivity, R.drawable.ic_check_wrong)?.constantState) {
                 TooltipCompat.setTooltipText(regPass, "Пароль должен состоять из 8 символов и включать в себя цифры, буквы, один спецсимвол и одну букву с заглавной")
-                regPass.performLongClick() // Активируем подсказку
+                regPass.performLongClick()
             }
         }
     }
 
     private fun setupFocusChange(editText: EditText, focusedDrawableRes: Int, defaultDrawableRes: Int) {
         editText.setOnFocusChangeListener { _, hasFocus ->
-            // Получаем текущие compoundDrawables
             val currentDrawables = editText.compoundDrawables
 
-            // Определяем новую левую иконку в зависимости от фокуса
             val newLeftDrawable = ContextCompat.getDrawable(this, if (hasFocus) focusedDrawableRes else defaultDrawableRes)?.mutate()
 
-            // Устанавливаем новые compoundDrawables, сохраняя правую иконку (глаз)
             editText.setCompoundDrawablesWithIntrinsicBounds(
-                newLeftDrawable, // Левая иконка
-                currentDrawables[1], // Верхняя иконка (если есть)
-                currentDrawables[2], // Правая иконка (галочка)
-                currentDrawables[3]  // Нижняя иконка (если есть)
+                newLeftDrawable,
+                currentDrawables[1],
+                currentDrawables[2],
+                currentDrawables[3]
             )
         }
     }
 
     private fun registerUser(login: String, password: String, firstName: String, lastName: String, middleName: String) {
-        // Проверяем пароль перед регистрацией
         if (!isPasswordValid(password)) {
             Toast.makeText(this, "Пароль не соответствует требованиям", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Шаг 1: Получаем все записи для определения максимального UID и проверки пропусков
         databaseReference.get().addOnSuccessListener { snapshot ->
-            val existingUIDs = mutableListOf<Long>() // Список для хранения существующих UID
+            val existingUIDs = mutableListOf<Long>()
 
-            // Проходим по всем записям и извлекаем UID
             for (userSnapshot in snapshot.children) {
                 val uidKey = userSnapshot.key ?: continue
                 val uidNumber = uidKey.replace("uid", "").toLongOrNull() ?: continue
                 existingUIDs.add(uidNumber)
             }
 
-            // Сортируем UID по возрастанию
             existingUIDs.sort()
 
-            // Находим первый пропущенный UID
-            var newUIDNumber = 1L // Начинаем с 1
+            var newUIDNumber = 1L
             for (uid in existingUIDs) {
                 if (uid != newUIDNumber) {
-                    break // Пропуск найден, выходим из цикла
+                    break
                 }
                 newUIDNumber++
             }
 
-            // Генерируем новый UID
             val newUID = "uid$newUIDNumber"
 
-            // Создаем объект с данными пользователя
             val userData = mapOf(
                 "login" to login,
                 "password" to password,
-                "role" to "user", // Новый пользователь по умолчанию имеет роль "user"
-                "avatarUrl" to "", // URL аватарки пока пустой
+                "role" to "user",
+                "avatarUrl" to "",
                 "firstName" to firstName,
                 "lastName" to lastName,
                 "middleName" to middleName
             )
 
-            // Проверяем, существует ли пользователь с таким логином
             databaseReference.orderByChild("login").equalTo(login).get().addOnSuccessListener { loginSnapshot ->
                 if (loginSnapshot.exists()) {
                     Toast.makeText(this, "Пользователь с таким логином уже существует", Toast.LENGTH_SHORT).show()
                 } else {
-                    // Сохраняем данные нового пользователя с новым UID
                     databaseReference.child(newUID.toString()).setValue(userData).addOnSuccessListener {
                         Toast.makeText(this, "Пользователь успешно зарегистрирован", Toast.LENGTH_SHORT).show()
                         finish()

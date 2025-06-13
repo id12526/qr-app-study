@@ -33,15 +33,13 @@ class ListActivity : AppCompatActivity() {
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Настройка цветов статус-бара и навигационной панели
         window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
-
-        // Настройка кнопки "Назад"
+        
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             finish()
@@ -53,7 +51,6 @@ class ListActivity : AppCompatActivity() {
         val listView = findViewById<ListView>(R.id.listView)
 
         rootLayout.setOnClickListener {
-            // Снимаем фокус с EditText
             currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -62,26 +59,21 @@ class ListActivity : AppCompatActivity() {
         }
 
         listView.setOnTouchListener { _, _ ->
-            // Передаем клик на root_layout
             rootLayout.performClick()
-            false // Возвращаем false, чтобы ListView продолжал обрабатывать свои события
+            false
         }
 
-        // Получаем название категории из Intent
         categoryName = intent.getStringExtra("CATEGORY_NAME") ?: ""
         binding.categoryTitle.text = categoryName
 
-        // Инициализация списков
         productList = mutableListOf()
         fullProductList = mutableListOf()
 
-        // Инициализация адаптера
         val adapter = object : ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productList) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
                 val textView = view.findViewById<TextView>(android.R.id.text1)
 
-                // Добавляем номер перед названием элемента
                 textView.text = "${position + 1}. ${productList[position]}"
 
                 return view
@@ -90,13 +82,8 @@ class ListActivity : AppCompatActivity() {
 
         binding.listView.adapter = adapter
 
-        // Подключение к Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("Products/$categoryName")
-
-        // Загрузка данных
         loadProducts()
-
-        // Настройка поиска
         searchEditText = findViewById(R.id.searchEditText)
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -113,7 +100,6 @@ class ListActivity : AppCompatActivity() {
             override fun afterTextChanged(editable: Editable?) {}
         })
 
-        // Обработка клика на элемент списка
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val selectedItem = productList[position]
             navigateToDetailActivity(selectedItem)
@@ -122,18 +108,15 @@ class ListActivity : AppCompatActivity() {
 
     private fun setupFocusChange(editText: EditText, focusedDrawableRes: Int, defaultDrawableRes: Int) {
         editText.setOnFocusChangeListener { _, hasFocus ->
-            // Получаем текущие compoundDrawables
             val currentDrawables = editText.compoundDrawables
 
-            // Определяем новую левую иконку в зависимости от фокуса
             val newLeftDrawable = ContextCompat.getDrawable(this, if (hasFocus) focusedDrawableRes else defaultDrawableRes)?.mutate()
 
-            // Устанавливаем новые compoundDrawables, сохраняя правую иконку (глаз)
             editText.setCompoundDrawablesWithIntrinsicBounds(
-                newLeftDrawable, // Левая иконка
-                currentDrawables[1], // Верхняя иконка (если есть)
-                currentDrawables[2], // Правая иконка (глаз)
-                currentDrawables[3]  // Нижняя иконка (если есть)
+                newLeftDrawable,
+                currentDrawables[1],
+                currentDrawables[2],
+                currentDrawables[3]
             )
         }
     }
@@ -153,7 +136,7 @@ class ListActivity : AppCompatActivity() {
                     showListView()
                 } else {
                     Toast.makeText(this@ListActivity, "Нет данных для этой категории", Toast.LENGTH_SHORT).show()
-                    showNoResultsMessage() // Показать сообщение, если данных нет
+                    showNoResultsMessage()
                 }
             }
 
@@ -193,7 +176,6 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun navigateToDetailActivity(productNameWithNumber: String) {
-        // Убираем номер из строки перед передачей в следующую активити
         val productName = productNameWithNumber.substringAfter(". ").trim()
 
         val intent = Intent(this@ListActivity, ListDetailActivity::class.java)

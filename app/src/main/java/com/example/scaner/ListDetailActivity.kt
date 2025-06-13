@@ -44,7 +44,6 @@ class ListDetailActivity : AppCompatActivity() {
             finish()
         }
 
-        // Получение названия выбранного объекта из Intent
         val itemName = intent.getStringExtra("ITEM_NAME")
         val categoryName = intent.getStringExtra("CATEGORY_NAME")
 
@@ -54,17 +53,14 @@ class ListDetailActivity : AppCompatActivity() {
             return
         }
 
-        // Указатель на категорию и объект в Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("Products/$categoryName/$itemName")
 
         loadItemDetails()
 
-        // Логика кнопки "ПОКАЗАТЬ QR-КОД"
         binding.showQrButton.setOnClickListener {
             showQRCodeDialog()
         }
 
-        // Логика кнопки "ЭКСПОРТИРОВАТЬ В PDF"
         binding.exportPdfButton.setOnClickListener {
             generateAndSavePDF()
         }
@@ -148,56 +144,50 @@ class ListDetailActivity : AppCompatActivity() {
     }
 
     private fun generateAndSavePDF() {
-        // Получаем данные из TextView
         val itemName = binding.itemName.text.toString()
         val itemDescription = binding.itemDescription.text.toString()
         val itemId = binding.itemId.text.toString()
         val itemQr = binding.itemQr.text.toString()
 
-        // Создаем PDF-документ
         val pdfDocument = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4 размер (в пикселях)
         val page = pdfDocument.startPage(pageInfo)
 
-        // Рисуем текст на странице
         val canvas = page.canvas
         val paint = android.graphics.Paint().apply {
             textSize = 16f
             color = android.graphics.Color.BLACK
         }
 
-        var yPosition = 50f // Начальная позиция по оси Y
-        val pageWidth = 595f // Ширина страницы A4
-        val margin = 50f // Отступы слева и справа
+        var yPosition = 50f
+        val pageWidth = 595f
+        val margin = 50f
 
-        // Функция для рисования текста с переносом
         fun drawMultilineText(text: String) {
-            val maxWidth = pageWidth - 2 * margin // Максимальная ширина текста
-            val words = text.split(" ") // Разделяем текст на слова
-            val lines = mutableListOf<String>() // Список строк для отрисовки
+            val maxWidth = pageWidth - 2 * margin
+            val words = text.split(" ")
+            val lines = mutableListOf<String>()
             var currentLine = ""
 
             for (word in words) {
                 val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
                 if (paint.measureText(testLine) <= maxWidth) {
-                    currentLine = testLine // Добавляем слово в текущую строку
+                    currentLine = testLine
                 } else {
-                    lines.add(currentLine) // Сохраняем текущую строку
-                    currentLine = word // Начинаем новую строку
+                    lines.add(currentLine)
+                    currentLine = word
                 }
             }
             if (currentLine.isNotEmpty()) {
-                lines.add(currentLine) // Добавляем последнюю строку
+                lines.add(currentLine)
             }
 
-            // Отрисовываем строки
             for (line in lines) {
                 canvas.drawText(line, margin, yPosition, paint)
-                yPosition += 30f // Перемещаемся на следующую строку
+                yPosition += 30f
             }
         }
 
-        // Рисуем заголовки и текст
         canvas.drawText("Название:", margin, yPosition, paint)
         yPosition += 30f
         drawMultilineText(itemName)
@@ -215,7 +205,6 @@ class ListDetailActivity : AppCompatActivity() {
 
         pdfDocument.finishPage(page)
 
-        // Сохраняем PDF на устройство
         val fileName = "ItemDetails_${System.currentTimeMillis()}.pdf"
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)

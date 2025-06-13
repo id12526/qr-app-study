@@ -11,7 +11,7 @@
         <!-- Цвет фона Splash Screen -->
         <item name="android:windowSplashScreenBackground">@color/white</item>
         <!-- Иконка Splash Screen -->
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/qr_logo</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="android:windowSplashScreenAnimationDuration">1000</item>
         <item name="android:windowSplashScreenBrandingImage">@drawable/brand_image</item>
     </style>

@@ -1,7 +1,9 @@
 package com.example.scaner
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -22,7 +24,7 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
 
         window.decorView.systemUiVisibility = (
@@ -34,6 +36,15 @@ class UploadActivity : AppCompatActivity() {
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             finish()
+        }
+
+        val rootLayout = findViewById<View>(R.id.root_layout)
+        rootLayout.setOnClickListener {
+            currentFocus?.let { view ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                view.clearFocus()
+            }
         }
 
         val defaultMinLines = 1

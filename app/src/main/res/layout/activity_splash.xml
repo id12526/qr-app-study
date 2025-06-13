@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".SplashActivity">
 
-    <!-- Основная часть с загрузкой по центру -->
     <LinearLayout
         android:id="@+id/form_container"
         android:layout_width="wrap_content"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Круглый ProgressBar -->
         <ProgressBar
             android:id="@+id/loading_progress"
             android:layout_width="wrap_content"
@@ -30,6 +28,6 @@
             android:indeterminate="true"
             android:elevation="4dp"
             android:indeterminateDuration="1000"
-            android:indeterminateTint="@color/gradient_2" />
+            android:indeterminateTint="@color/gradient_1" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.scaner
 
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,7 @@ import java.io.File
 import android.content.Intent
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.inputmethod.InputMethodManager
 import java.io.FileInputStream
 
 class GenerationActivity : AppCompatActivity() {
@@ -28,7 +30,7 @@ class GenerationActivity : AppCompatActivity() {
         binding = ActivityGenerationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = resources.getColor(android.R.color.white, theme)
+        window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
 
         window.decorView.systemUiVisibility = (
@@ -40,6 +42,15 @@ class GenerationActivity : AppCompatActivity() {
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             finish()
+        }
+
+        val rootLayout = findViewById<View>(R.id.root_layout)
+        rootLayout.setOnClickListener {
+            currentFocus?.let { view ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                view.clearFocus()
+            }
         }
 
         val generateButton = findViewById<Button>(R.id.generateButton)
@@ -58,7 +69,6 @@ class GenerationActivity : AppCompatActivity() {
     }
 
     private fun generateQRCode() {
-        // Получаем текст из EditText
         val qrText = binding.qrText.text.toString().trim()
 
         if (qrText.isEmpty()) {
@@ -66,10 +76,8 @@ class GenerationActivity : AppCompatActivity() {
             return
         }
 
-        // Генерация QR-кода
         val qrCodeBitmap = generateQRCodeBitmap(qrText, 500, 500)
         if (qrCodeBitmap != null) {
-            // Отображаем QR-код в ImageView
             binding.qrCodeImageView.setImageBitmap(qrCodeBitmap)
             binding.qrCodeImageView.visibility = View.VISIBLE
 
@@ -82,7 +90,7 @@ class GenerationActivity : AppCompatActivity() {
     private fun generateQRCodeBitmap(text: String, width: Int, height: Int): Bitmap? {
         val hints = Hashtable<EncodeHintType, Any>()
         hints[EncodeHintType.CHARACTER_SET] = "UTF-8"
-        hints[EncodeHintType.MARGIN] = 1 // Уменьшаем отступы
+        hints[EncodeHintType.MARGIN] = 1
 
         try {
             val bitMatrix: BitMatrix = MultiFormatWriter().encode(
@@ -134,7 +142,7 @@ class GenerationActivity : AppCompatActivity() {
 
     companion object {
         private const val SAVE_QR_CODE_REQUEST_CODE = 1001
-        private var tempFilePath: String? = null // Путь к временному файлу
+        private var tempFilePath: String? = null
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -143,7 +151,6 @@ class GenerationActivity : AppCompatActivity() {
         if (requestCode == SAVE_QR_CODE_REQUEST_CODE && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 try {
-                    // Копируем временный файл в выбранное место
                     val inputStream = FileInputStream(File(tempFilePath))
                     val outputStream = contentResolver.openOutputStream(uri)
 
@@ -156,7 +163,6 @@ class GenerationActivity : AppCompatActivity() {
                     e.printStackTrace()
                     Toast.makeText(this, "Ошибка при сохранении QR-кода", Toast.LENGTH_SHORT).show()
                 } finally {
-                    // Удаляем временный файл
                     File(tempFilePath).delete()
                     tempFilePath = null
                 }

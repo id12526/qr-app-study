@@ -32,7 +32,6 @@ class AuthActivity : AppCompatActivity() {
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Настройка цветов статус-бара и навигационной панели
         window.statusBarColor = resources.getColor(R.color.gradient_2, theme)
         window.navigationBarColor = resources.getColor(R.color.gradient_1, theme)
         window.decorView.systemUiVisibility = (
@@ -42,7 +41,6 @@ class AuthActivity : AppCompatActivity() {
 
         val rootLayout = findViewById<View>(R.id.root_layout)
         rootLayout.setOnClickListener {
-            // Снимаем фокус с EditText
             currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -50,7 +48,6 @@ class AuthActivity : AppCompatActivity() {
             }
         }
 
-        // Инициализация SharedPreferences
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
         val rememberMeCheckBox = findViewById<CheckBox>(R.id.remember_me)
 
@@ -58,7 +55,6 @@ class AuthActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.gradient_1)
         )
 
-        // Проверка сохраненных данных
         val savedLogin = sharedPreferences.getString("LOGIN", "")
         val savedPassword = sharedPreferences.getString("PASSWORD", "")
         if (savedLogin != null && savedPassword != null) {
@@ -70,14 +66,11 @@ class AuthActivity : AppCompatActivity() {
         setupFocusChange(findViewById(R.id.login), R.drawable.ic_person_gradient, R.drawable.ic_person)
         setupFocusChange(findViewById(R.id.pass), R.drawable.ic_password_gradient, R.drawable.ic_password)
 
-        // Настройка EditText для пароля
         val passwordInput = findViewById<EditText>(R.id.pass)
         var isPasswordVisible = false
 
-        // Добавляем обработчик нажатия на иконку глазка
         passwordInput.setOnTouchListener { _, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
-                // Проверяем, было ли нажатие на иконку глазка
                 if (event.rawX >= passwordInput.right - passwordInput.compoundDrawables[2].bounds.width()) {
                     isPasswordVisible = !isPasswordVisible
                     updatePasswordVisibility(passwordInput, isPasswordVisible)
@@ -87,14 +80,12 @@ class AuthActivity : AppCompatActivity() {
             return@setOnTouchListener false
         }
 
-        // Настройка TextView "Зарегистрируйтесь"
         val registerText = findViewById<TextView>(R.id.register_link)
         registerText.setOnClickListener {
             val intent = Intent(this@AuthActivity, RegActivity::class.java)
             startActivity(intent)
         }
 
-        // Логика авторизации
         binding.signInButton.setOnClickListener {
             val loginInput = binding.login.text.toString()
             val passInput = binding.pass.text.toString()
@@ -109,42 +100,35 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setupFocusChange(editText: EditText, focusedDrawableRes: Int, defaultDrawableRes: Int) {
         editText.setOnFocusChangeListener { _, hasFocus ->
-            // Получаем текущие compoundDrawables
             val currentDrawables = editText.compoundDrawables
-
-            // Определяем новую левую иконку в зависимости от фокуса
             val newLeftDrawable = ContextCompat.getDrawable(this, if (hasFocus) focusedDrawableRes else defaultDrawableRes)?.mutate()
-
-            // Устанавливаем новые compoundDrawables, сохраняя правую иконку (глаз)
             editText.setCompoundDrawablesWithIntrinsicBounds(
-                newLeftDrawable, // Левая иконка
-                currentDrawables[1], // Верхняя иконка (если есть)
-                currentDrawables[2], // Правая иконка (глаз)
-                currentDrawables[3]  // Нижняя иконка (если есть)
+                newLeftDrawable,
+                currentDrawables[1],
+                currentDrawables[2],
+                currentDrawables[3]
             )
         }
     }
 
-    // Метод для обновления видимости пароля
     private fun updatePasswordVisibility(editText: EditText, isVisible: Boolean) {
         if (isVisible) {
             editText.transformationMethod = HideReturnsTransformationMethod.getInstance()
             editText.setCompoundDrawablesWithIntrinsicBounds(
-                editText.compoundDrawables[0], // Левая иконка (например, замок)
+                editText.compoundDrawables[0],
                 null,
-                getDrawable(R.drawable.ic_eye_on), // Правая иконка (открытый глаз)
+                getDrawable(R.drawable.ic_eye_on),
                 null
             )
         } else {
             editText.transformationMethod = PasswordTransformationMethod.getInstance()
             editText.setCompoundDrawablesWithIntrinsicBounds(
-                editText.compoundDrawables[0], // Левая иконка (например, замок)
+                editText.compoundDrawables[0],
                 null,
-                getDrawable(R.drawable.ic_eye_off), // Правая иконка (закрытый глаз)
+                getDrawable(R.drawable.ic_eye_off),
                 null
             )
         }
-        // Перемещаем курсор в конец текста
         editText.setSelection(editText.text.length)
     }
 
@@ -154,24 +138,24 @@ class AuthActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
-                        val uid = userSnapshot.key // Получаем UID пользователя
+                        val uid = userSnapshot.key
                         val password = userSnapshot.child("password").value
                         val role = userSnapshot.child("role").value
                         val avatarUrl = userSnapshot.child("avatarUrl").value
 
                         if (password.toString() == passInput) {
-                            // Сохранение данных, если отмечено "Запомнить меня"
+
                             if (binding.rememberMe.isChecked) {
                                 saveUserData(login, passInput)
                             } else {
                                 clearUserData()
                             }
 
-                            // Переход на MainActivity с данными пользователя
+
                             val intent = Intent(this@AuthActivity, MainActivity::class.java).apply {
                                 putExtra("ROLE", role.toString())
                                 putExtra("AVATAR_URL", avatarUrl?.toString())
-                                putExtra("UID", uid) // Передаем UID вместо логина
+                                putExtra("UID", uid)
                             }
                             startActivity(intent)
                             finish()

@@ -22,10 +22,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Инициализация SharedPreferences
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
 
-        // Настройка цветов статус-бара и навигационной панели
         window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
@@ -33,7 +31,6 @@ class MainActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        // Получаем данные из Intent
         currentUid = intent.getStringExtra("UID") ?: ""
         role = intent.getStringExtra("ROLE")
         avatarUrl = intent.getStringExtra("AVATAR_URL")
@@ -42,12 +39,11 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "Роль: $role")
         Log.d("MainActivity", "URL аватарки: $avatarUrl")
 
-        // Проверяем роль пользователя
         if (role != "admin") {
-            binding.mainAdmin.visibility = View.GONE // Скрываем кнопку ADMIN PANEL
+            binding.mainAdmin.visibility = View.GONE
         }
 
-        // Загрузка аватарки
+
         if (!avatarUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(avatarUrl)
@@ -62,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 .into(binding.avatarImage)
         }
 
-        // Логика кнопок
+
         binding.mainCategory.setOnClickListener {
             val intent = Intent(this@MainActivity, CategoryActivity::class.java)
             startActivity(intent)
@@ -78,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Переход на страницу профиля
+
         binding.avatarImage.setOnClickListener {
             val intent = Intent(this@MainActivity, ProfileActivity::class.java)
             intent.putExtra("UID", currentUid)
@@ -86,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Кнопка "Назад" (возврат к авторизации)
+
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             clearUserData()
