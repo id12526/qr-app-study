@@ -3,7 +3,6 @@ package com.example.scaner
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scaner.databinding.ActivityCategoryBinding
 
@@ -23,8 +22,7 @@ class CategoryActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 

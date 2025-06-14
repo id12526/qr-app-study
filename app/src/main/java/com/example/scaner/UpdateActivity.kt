@@ -7,7 +7,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scaner.databinding.ActivityUpdateBinding
@@ -34,8 +33,7 @@ class UpdateActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
@@ -52,7 +50,6 @@ class UpdateActivity : AppCompatActivity() {
         val defaultMaxLines = 1
         val expandedMaxLines = 5
         val editText = findViewById<EditText>(R.id.uploadDesc)
-
         editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 editText.minLines = expandedMaxLines
@@ -67,13 +64,11 @@ class UpdateActivity : AppCompatActivity() {
         val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = categoryAdapter
-
         binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
                 selectedCategory = categories[position]
                 loadObjectsForCategory(selectedCategory)
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
@@ -82,7 +77,6 @@ class UpdateActivity : AppCompatActivity() {
                 selectedObjectKey = parent.getItemAtPosition(position).toString()
                 loadObjectData(selectedObjectKey)
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
@@ -91,18 +85,14 @@ class UpdateActivity : AppCompatActivity() {
             val desc = binding.uploadDesc.text.toString().trim()
             val id = binding.uploadId.text.toString().trim()
             val qr = binding.uploadQr.text.toString().trim()
-
             if (newName.isEmpty() || desc.isEmpty() || id.isEmpty() || qr.isEmpty()) {
                 Toast.makeText(this, "Пожалуйста заполните все поля", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             val isKeyChanged = selectedObjectKey != newName
-
             if (isKeyChanged) {
                 val newRef = FirebaseDatabase.getInstance().getReference("Products/$selectedCategory/$newName")
                 val oldRef = FirebaseDatabase.getInstance().getReference("Products/$selectedCategory/$selectedObjectKey")
-
                 val productData = ProductData(newName, desc, id, qr)
                 newRef.setValue(productData).addOnSuccessListener {
                     oldRef.removeValue().addOnSuccessListener {
@@ -129,14 +119,12 @@ class UpdateActivity : AppCompatActivity() {
 
     private fun loadObjectsForCategory(category: String) {
         val objects = mutableListOf<String>()
-
         FirebaseDatabase.getInstance().getReference("Products/$category")
             .get().addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     for (childSnapshot in snapshot.children) {
                         objects.add(childSnapshot.key.toString())
                     }
-
                     val objectAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, objects)
                     objectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     binding.objectSpinner.adapter = objectAdapter

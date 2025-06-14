@@ -19,7 +19,6 @@ class ScannerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = CustomScannerLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -60,22 +59,18 @@ class ScannerActivity : AppCompatActivity() {
         binding.barcodeScannerView.decodeContinuous(object : BarcodeCallback {
             override fun barcodeResult(result: BarcodeResult?) {
                 val qrCode = result?.text ?: return
-
                 val databaseReference = FirebaseDatabase.getInstance().getReference("Products")
                 databaseReference.get().addOnSuccessListener { snapshot ->
                     var productFound = false
-
                     for (category in snapshot.children) {
                         for (productSnapshot in category.children) {
                             val qr = productSnapshot.child("qr").value?.toString()
                             if (qr == qrCode) {
                                 val itemName = productSnapshot.child("name").value?.toString()
-
                                 val intent = Intent(this@ScannerActivity, ListDetailActivity::class.java)
                                 intent.putExtra("ITEM_NAME", itemName)
                                 intent.putExtra("CATEGORY_NAME", category.key) 
                                 startActivity(intent)
-
                                 productFound = true
                                 break
                             }
@@ -88,7 +83,6 @@ class ScannerActivity : AppCompatActivity() {
                 }.addOnFailureListener {
                     Toast.makeText(this@ScannerActivity, "Ошибка загрузки данных: ${it.message}", Toast.LENGTH_SHORT).show()
                 }
-
                 binding.barcodeScannerView.pause()
             }
             override fun possibleResultPoints(resultPoints: MutableList<com.google.zxing.ResultPoint>?) {}

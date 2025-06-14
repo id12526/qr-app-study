@@ -3,16 +3,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="false">
 
-    <!-- Контейнер для кнопки и текста -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="top|start"
         android:layout_margin="8dp"
-        android:elevation="4dp"> <!-- Добавлено elevation -->
+        android:elevation="4dp">
 
-        <!-- Кнопка "назад" -->
         <ImageButton
             android:id="@+id/back_button"
             android:layout_width="48dp"
@@ -25,7 +23,6 @@
             android:scaleType="fitCenter"
             android:adjustViewBounds="true" />
 
-        <!-- Текст -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,22 +34,19 @@
             android:paddingStart="12dp" />
     </LinearLayout>
 
-    <!-- Превью камеры -->
     <com.journeyapps.barcodescanner.BarcodeView
         android:id="@+id/barcode_scanner_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Затемнённый фон с вырезом -->
     <com.example.scaner.DimmedBackgroundView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Рамка для области сканирования -->
     <View
         android:id="@+id/scan_overlay"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_gravity="center"
-        android:background="@drawable/custom_scan_frame" />
+        android:background="@drawable/scan_frame" />
 </FrameLayout>

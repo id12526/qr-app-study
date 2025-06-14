@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Градиентный фон -->
     <View
         android:id="@+id/blue_background"
         android:layout_width="0dp"
@@ -26,7 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Верхняя панель с CardView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/top_card"
         android:layout_width="0dp"
@@ -127,7 +125,6 @@
                 android:elevation="4dp"
                 android:clipToOutline="true" />
 
-            <!-- Имя пользователя -->
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
@@ -139,7 +136,6 @@
                 android:textColor="@color/gradient_1"
                 android:layout_marginBottom="4dp" />
 
-            <!-- Логин пользователя -->
             <TextView
                 android:id="@+id/user_login"
                 android:layout_width="wrap_content"

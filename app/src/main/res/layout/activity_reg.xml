@@ -2,12 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_layout"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Градиентный фон -->
     <View
         android:id="@+id/blue_background"
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="parent" />
 
-    <!-- Верхнее меню -->
     <LinearLayout
         android:id="@+id/top_menu"
         android:layout_width="match_parent"
@@ -55,7 +53,6 @@
             android:paddingStart="12dp" />
     </LinearLayout>
 
-    <!-- Блок регистрации (белая подложка с тенью) -->
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -78,9 +75,8 @@
             android:clipChildren="false"
             android:padding="20dp">
 
-            <!-- Логин -->
             <EditText
-                android:id="@+id/reg_login"
+                android:id="@+id/regLogin"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/edittext_background"
@@ -96,9 +92,8 @@
                 android:textColor="@color/black"
                 android:stateListAnimator="@animator/edittext_focus_animator" />
 
-            <!-- Пароль -->
             <EditText
-                android:id="@+id/reg_pass"
+                android:id="@+id/regPass"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
@@ -114,9 +109,8 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Имя -->
             <EditText
-                android:id="@+id/reg_lastName"
+                android:id="@+id/regLastName"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
@@ -132,9 +126,8 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Фамилия -->
             <EditText
-                android:id="@+id/reg_firstName"
+                android:id="@+id/regFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginBottom="20dp"
@@ -150,9 +143,8 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Отчество -->
             <EditText
-                android:id="@+id/reg_middleName"
+                android:id="@+id/regMiddleName"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginBottom="40dp"

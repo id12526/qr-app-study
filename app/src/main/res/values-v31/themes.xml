@@ -13,6 +13,6 @@
         <!-- Иконка Splash Screen -->
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="android:windowSplashScreenAnimationDuration">1000</item>
-        <item name="android:windowSplashScreenBrandingImage">@drawable/brand_image</item>
+        <!-- <item name="android:windowSplashScreenBrandingImage">@drawable/brand_image</item> -->
     </style>
 </resources>

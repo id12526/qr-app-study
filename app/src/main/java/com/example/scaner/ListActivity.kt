@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +22,6 @@ class ListActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var productList: MutableList<String>
     private lateinit var fullProductList: MutableList<String>
-
     private var categoryName: String = ""
     private lateinit var searchEditText: EditText
 
@@ -39,18 +36,14 @@ class ListActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
-        
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
+
+        binding.backButton.setOnClickListener {
             finish()
         }
 
-        setupFocusChange(findViewById(R.id.searchEditText), R.drawable.ic_search_gradient, R.drawable.ic_search)
+        setupFocusChange(binding.searchEditText, R.drawable.ic_search_gradient, R.drawable.ic_search)
 
-        val rootLayout = findViewById<View>(R.id.root_layout)
-        val listView = findViewById<ListView>(R.id.listView)
-
-        rootLayout.setOnClickListener {
+        binding.rootLayout.setOnClickListener {
             currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -58,14 +51,13 @@ class ListActivity : AppCompatActivity() {
             }
         }
 
-        listView.setOnTouchListener { _, _ ->
-            rootLayout.performClick()
+        binding.listView.setOnTouchListener { _, _ ->
+            binding.rootLayout.performClick()
             false
         }
 
         categoryName = intent.getStringExtra("CATEGORY_NAME") ?: ""
         binding.categoryTitle.text = categoryName
-
         productList = mutableListOf()
         fullProductList = mutableListOf()
 
@@ -73,21 +65,17 @@ class ListActivity : AppCompatActivity() {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
                 val textView = view.findViewById<TextView>(android.R.id.text1)
-
                 textView.text = "${position + 1}. ${productList[position]}"
-
                 return view
             }
         }
 
         binding.listView.adapter = adapter
-
         databaseReference = FirebaseDatabase.getInstance().getReference("Products/$categoryName")
         loadProducts()
         searchEditText = findViewById(R.id.searchEditText)
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = charSequence.toString().trim()
                 if (query.isNotEmpty()) {
@@ -96,7 +84,6 @@ class ListActivity : AppCompatActivity() {
                     resetFilter()
                 }
             }
-
             override fun afterTextChanged(editable: Editable?) {}
         })
 
@@ -109,9 +96,7 @@ class ListActivity : AppCompatActivity() {
     private fun setupFocusChange(editText: EditText, focusedDrawableRes: Int, defaultDrawableRes: Int) {
         editText.setOnFocusChangeListener { _, hasFocus ->
             val currentDrawables = editText.compoundDrawables
-
             val newLeftDrawable = ContextCompat.getDrawable(this, if (hasFocus) focusedDrawableRes else defaultDrawableRes)?.mutate()
-
             editText.setCompoundDrawablesWithIntrinsicBounds(
                 newLeftDrawable,
                 currentDrawables[1],
@@ -139,7 +124,6 @@ class ListActivity : AppCompatActivity() {
                     showNoResultsMessage()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@ListActivity, "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
             }
@@ -177,7 +161,6 @@ class ListActivity : AppCompatActivity() {
 
     private fun navigateToDetailActivity(productNameWithNumber: String) {
         val productName = productNameWithNumber.substringAfter(". ").trim()
-
         val intent = Intent(this@ListActivity, ListDetailActivity::class.java)
         intent.putExtra("CATEGORY_NAME", categoryName)
         intent.putExtra("ITEM_NAME", productName)

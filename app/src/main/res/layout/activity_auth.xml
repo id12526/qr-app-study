@@ -15,7 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="parent" />
 
-    <!-- Надпись "Авторизация" -->
     <TextView
         android:id="@+id/auth_title"
         android:layout_width="wrap_content"
@@ -31,7 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="90dp" />
 
-    <!-- Блок авторизации (белая подложка с тенью) -->
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,7 +52,6 @@
             android:clipChildren="false"
             android:padding="20dp">
 
-            <!-- Поле ввода логина -->
             <EditText
                 android:id="@+id/login"
                 android:layout_width="match_parent"
@@ -72,7 +69,6 @@
                 android:textColor="@color/black"
                 android:stateListAnimator="@animator/edittext_focus_animator" />
 
-            <!-- Поле ввода пароля -->
             <EditText
                 android:id="@+id/pass"
                 android:layout_width="match_parent"
@@ -92,9 +88,8 @@
                 android:drawableEnd="@drawable/ic_eye_off"
                 android:stateListAnimator="@animator/edittext_focus_animator" />
 
-            <!-- Кнопка "Запомнить меня" -->
             <CheckBox
-                android:id="@+id/remember_me"
+                android:id="@+id/rememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Запомнить меня"
@@ -104,7 +99,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="25dp" />
 
-            <!-- Кнопка "Войти" -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signInButton"
                 android:layerType="software"
@@ -122,7 +116,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Текст внизу -->
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="0dp"
@@ -136,7 +129,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Первый текст -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,9 +138,8 @@
             android:textColor="@android:color/white"
             android:gravity="center" />
 
-        <!-- Кликабельный текст -->
         <TextView
-            android:id="@+id/register_link"
+            android:id="@+id/registerLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="web"

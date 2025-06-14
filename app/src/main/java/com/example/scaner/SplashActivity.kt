@@ -48,7 +48,6 @@ class SplashActivity : AppCompatActivity() {
                         val storedPassword = userSnapshot.child("password").value
                         val role = userSnapshot.child("role").value
                         val avatarUrl = userSnapshot.child("avatarUrl").value
-
                         if (storedPassword.toString() == password) {
                             val intent = Intent(this@SplashActivity, MainActivity::class.java).apply {
                                 putExtra("ROLE", role.toString())
@@ -63,7 +62,6 @@ class SplashActivity : AppCompatActivity() {
                 }
                 navigateToAuthActivity()
             }
-
             override fun onCancelled(error: DatabaseError) {
                 navigateToAuthActivity()
             }

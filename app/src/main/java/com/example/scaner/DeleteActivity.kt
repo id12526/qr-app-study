@@ -1,12 +1,9 @@
 package com.example.scaner
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scaner.databinding.ActivityDeleteBinding
@@ -33,27 +30,21 @@ class DeleteActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
-
 
         val categories = listOf("Мониторы", "Клавиатуры", "Мыши", "Системные блоки", "Стулья", "Столы", "Удлинители")
         val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = categoryAdapter
-
-
         binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
                 selectedCategory = categories[position]
                 loadObjectsForCategory(selectedCategory)
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-
 
         binding.objectSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
@@ -63,16 +54,12 @@ class DeleteActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-
         binding.deleteButton.setOnClickListener {
             if (selectedObjectKey.isEmpty()) {
                 Toast.makeText(this, "Пожалуйста, выберите объект для удаления", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-
             databaseReference = FirebaseDatabase.getInstance().getReference("Products/$selectedCategory/$selectedObjectKey")
-
             databaseReference.removeValue().addOnSuccessListener {
                 Toast.makeText(this, "Объект удален", Toast.LENGTH_SHORT).show()
                 loadObjectsForCategory(selectedCategory)
@@ -90,11 +77,8 @@ class DeleteActivity : AppCompatActivity() {
             .get().addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     for (childSnapshot in snapshot.children) {
-
                         objects.add(childSnapshot.key.toString())
                     }
-
-
                     val objectAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, objects)
                     objectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     binding.objectSpinner.adapter = objectAdapter

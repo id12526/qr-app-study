@@ -3,7 +3,6 @@ package com.example.scaner
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.text.method.PasswordTransformationMethod
 import android.text.method.HideReturnsTransformationMethod
 import android.content.SharedPreferences
@@ -12,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.scaner.databinding.ActivityAuthBinding
@@ -39,8 +35,7 @@ class AuthActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        val rootLayout = findViewById<View>(R.id.root_layout)
-        rootLayout.setOnClickListener {
+        binding.rootLayout.setOnClickListener {
             currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -49,9 +44,8 @@ class AuthActivity : AppCompatActivity() {
         }
 
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
-        val rememberMeCheckBox = findViewById<CheckBox>(R.id.remember_me)
 
-        rememberMeCheckBox.buttonTintList = ColorStateList.valueOf(
+        binding.rememberMe.buttonTintList = ColorStateList.valueOf(
             ContextCompat.getColor(this, R.color.gradient_1)
         )
 
@@ -63,25 +57,22 @@ class AuthActivity : AppCompatActivity() {
             binding.rememberMe.isChecked = true
         }
 
-        setupFocusChange(findViewById(R.id.login), R.drawable.ic_person_gradient, R.drawable.ic_person)
-        setupFocusChange(findViewById(R.id.pass), R.drawable.ic_password_gradient, R.drawable.ic_password)
+        setupFocusChange(binding.login, R.drawable.ic_person_gradient, R.drawable.ic_person)
+        setupFocusChange(binding.pass, R.drawable.ic_password_gradient, R.drawable.ic_password)
 
-        val passwordInput = findViewById<EditText>(R.id.pass)
         var isPasswordVisible = false
-
-        passwordInput.setOnTouchListener { _, event ->
+        binding.pass.setOnTouchListener { _, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
-                if (event.rawX >= passwordInput.right - passwordInput.compoundDrawables[2].bounds.width()) {
+                if (event.rawX >= binding.pass.right - binding.pass.compoundDrawables[2].bounds.width()) {
                     isPasswordVisible = !isPasswordVisible
-                    updatePasswordVisibility(passwordInput, isPasswordVisible)
+                    updatePasswordVisibility(binding.pass, isPasswordVisible)
                     return@setOnTouchListener true
                 }
             }
             return@setOnTouchListener false
         }
 
-        val registerText = findViewById<TextView>(R.id.register_link)
-        registerText.setOnClickListener {
+        binding.registerLink.setOnClickListener {
             val intent = Intent(this@AuthActivity, RegActivity::class.java)
             startActivity(intent)
         }
@@ -142,16 +133,12 @@ class AuthActivity : AppCompatActivity() {
                         val password = userSnapshot.child("password").value
                         val role = userSnapshot.child("role").value
                         val avatarUrl = userSnapshot.child("avatarUrl").value
-
                         if (password.toString() == passInput) {
-
                             if (binding.rememberMe.isChecked) {
                                 saveUserData(login, passInput)
                             } else {
                                 clearUserData()
                             }
-
-
                             val intent = Intent(this@AuthActivity, MainActivity::class.java).apply {
                                 putExtra("ROLE", role.toString())
                                 putExtra("AVATAR_URL", avatarUrl?.toString())
@@ -170,7 +157,6 @@ class AuthActivity : AppCompatActivity() {
                     Toast.makeText(this@AuthActivity, "Неверный логин", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@AuthActivity, "Ошибка: ${error.message}", Toast.LENGTH_SHORT).show()
             }

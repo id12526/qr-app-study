@@ -24,11 +24,8 @@ class DimmedBackgroundView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
         val layer = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
-
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), dimmedPaint)
-
         val overlayWidth = 775f
         val overlayHeight = 775f
         val left = (width - overlayWidth) / 2
@@ -36,11 +33,9 @@ class DimmedBackgroundView @JvmOverloads constructor(
         val right = left + overlayWidth
         val bottom = top + overlayHeight
         val cornerRadius = 24f
-
         val path = Path()
         path.addRoundRect(left, top, right, bottom, cornerRadius, cornerRadius, Path.Direction.CW)
         canvas.drawPath(path, clearPaint)
-
         canvas.restoreToCount(layer)
     }
 }

@@ -4,9 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import com.bumptech.glide.Glide
 import com.example.scaner.databinding.ActivityMainBinding
 
@@ -31,18 +29,21 @@ class MainActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
+        binding.backButton.setOnClickListener {
+            clearUserData()
+            val intent = Intent(this@MainActivity, AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+        }
+
         currentUid = intent.getStringExtra("UID") ?: ""
         role = intent.getStringExtra("ROLE")
         avatarUrl = intent.getStringExtra("AVATAR_URL")
 
-        Log.d("MainActivity", "Текущий UID: $currentUid")
-        Log.d("MainActivity", "Роль: $role")
-        Log.d("MainActivity", "URL аватарки: $avatarUrl")
-
         if (role != "admin") {
             binding.mainAdmin.visibility = View.GONE
         }
-
 
         if (!avatarUrl.isNullOrEmpty()) {
             Glide.with(this)
@@ -57,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 .circleCrop()
                 .into(binding.avatarImage)
         }
-
 
         binding.mainCategory.setOnClickListener {
             val intent = Intent(this@MainActivity, CategoryActivity::class.java)
@@ -74,22 +74,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         binding.avatarImage.setOnClickListener {
             val intent = Intent(this@MainActivity, ProfileActivity::class.java)
             intent.putExtra("UID", currentUid)
             intent.putExtra("AVATAR_URL", avatarUrl)
             startActivity(intent)
-        }
-
-
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
-            clearUserData()
-            val intent = Intent(this@MainActivity, AuthActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            startActivity(intent)
-            finish()
         }
     }
 

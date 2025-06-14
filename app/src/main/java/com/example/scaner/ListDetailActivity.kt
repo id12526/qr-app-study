@@ -6,9 +6,7 @@ import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -39,14 +37,12 @@ class ListDetailActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
         val itemName = intent.getStringExtra("ITEM_NAME")
         val categoryName = intent.getStringExtra("CATEGORY_NAME")
-
         if (itemName == null || categoryName == null) {
             Toast.makeText(this, "Ошибка передачи данных", Toast.LENGTH_SHORT).show()
             finish()
@@ -54,7 +50,6 @@ class ListDetailActivity : AppCompatActivity() {
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Products/$categoryName/$itemName")
-
         loadItemDetails()
 
         binding.showQrButton.setOnClickListener {
@@ -84,7 +79,6 @@ class ListDetailActivity : AppCompatActivity() {
                         finish()
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@ListDetailActivity, "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
                 }
@@ -97,7 +91,6 @@ class ListDetailActivity : AppCompatActivity() {
             Toast.makeText(this, "QR-код не найден", Toast.LENGTH_SHORT).show()
             return
         }
-
         val qrCodeBitmap = generateQRCodeBitmap(qrText, 500, 500)
         if (qrCodeBitmap != null) {
             val dialogView = ImageView(this).apply {
@@ -105,12 +98,15 @@ class ListDetailActivity : AppCompatActivity() {
                 adjustViewBounds = true
                 setPadding(16, 16, 16, 16)
             }
-
-            AlertDialog.Builder(this)
-                .setTitle("QR-код")
-                .setView(dialogView)
-                .setPositiveButton("Закрыть") { dialog, _ -> dialog.dismiss() }
-                .show()
+            val builder = AlertDialog.Builder(this, R.style.CustomDialogTheme)
+            builder.setTitle("QR-код")
+            builder.setView(dialogView)
+            builder.setPositiveButton("Закрыть") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog = builder.create()
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.show()
         } else {
             Toast.makeText(this, "Ошибка при генерации QR-кода", Toast.LENGTH_SHORT).show()
         }
@@ -120,7 +116,6 @@ class ListDetailActivity : AppCompatActivity() {
         val hints = Hashtable<EncodeHintType, Any>()
         hints[EncodeHintType.CHARACTER_SET] = "UTF-8"
         hints[EncodeHintType.MARGIN] = 1
-
         try {
             val bitMatrix: BitMatrix = MultiFormatWriter().encode(
                 text,
@@ -129,7 +124,6 @@ class ListDetailActivity : AppCompatActivity() {
                 height,
                 hints
             )
-
             val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
             for (x in 0 until width) {
                 for (y in 0 until height) {
@@ -148,27 +142,22 @@ class ListDetailActivity : AppCompatActivity() {
         val itemDescription = binding.itemDescription.text.toString()
         val itemId = binding.itemId.text.toString()
         val itemQr = binding.itemQr.text.toString()
-
         val pdfDocument = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4 размер (в пикселях)
         val page = pdfDocument.startPage(pageInfo)
-
         val canvas = page.canvas
         val paint = android.graphics.Paint().apply {
             textSize = 16f
             color = android.graphics.Color.BLACK
         }
-
         var yPosition = 50f
         val pageWidth = 595f
         val margin = 50f
-
         fun drawMultilineText(text: String) {
             val maxWidth = pageWidth - 2 * margin
             val words = text.split(" ")
             val lines = mutableListOf<String>()
             var currentLine = ""
-
             for (word in words) {
                 val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
                 if (paint.measureText(testLine) <= maxWidth) {
@@ -181,40 +170,31 @@ class ListDetailActivity : AppCompatActivity() {
             if (currentLine.isNotEmpty()) {
                 lines.add(currentLine)
             }
-
             for (line in lines) {
                 canvas.drawText(line, margin, yPosition, paint)
                 yPosition += 30f
             }
         }
-
         canvas.drawText("Название:", margin, yPosition, paint)
         yPosition += 30f
         drawMultilineText(itemName)
-
         yPosition += 30f
         canvas.drawText("Описание:", margin, yPosition, paint)
         yPosition += 30f
         drawMultilineText(itemDescription)
-
         yPosition += 30f
         canvas.drawText(itemId, margin, yPosition, paint)
-
         yPosition += 30f
         canvas.drawText(itemQr, margin, yPosition, paint)
-
         pdfDocument.finishPage(page)
-
         val fileName = "ItemDetails_${System.currentTimeMillis()}.pdf"
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
             put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS)
         }
-
         val resolver = contentResolver
         val uri = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
-
         try {
             uri?.let {
                 val outputStream = resolver.openOutputStream(it)

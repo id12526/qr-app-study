@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Градиентный фон -->
     <View
         android:id="@+id/blue_background"
         android:layout_width="0dp"
@@ -26,7 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Верхняя панель с CardView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/top_card"
         android:layout_width="0dp"
@@ -88,7 +86,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Основной контент -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,7 +99,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Заголовок -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -136,7 +132,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Кнопка "Список" -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mainCategory"
                 android:layout_width="150dp"
@@ -159,7 +154,6 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:stateListAnimator="@animator/button_scale_animator" />
 
-            <!-- Кнопка "Сканер" -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mainOpenScanner"
                 android:layout_width="150dp"

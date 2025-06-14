@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Градиентный фон -->
     <View
         android:id="@+id/blue_background"
         android:layout_width="0dp"
@@ -26,7 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Верхняя панель с CardView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/top_card"
         android:layout_width="0dp"
@@ -110,7 +108,6 @@
             android:clipChildren="false"
             android:padding="20dp">
 
-            <!-- Название объекта -->
             <TextView
                 android:id="@+id/itemName"
                 android:layout_width="match_parent"
@@ -124,7 +121,6 @@
                 android:elevation="4dp"
                 android:gravity="center_horizontal" />
 
-            <!-- Описание объекта -->
             <TextView
                 android:id="@+id/itemDescription"
                 android:layout_width="match_parent"
@@ -137,7 +133,6 @@
                 android:elevation="4dp"
                 android:textColor="@color/black" />
 
-            <!-- Цена объекта -->
             <TextView
                 android:id="@+id/itemId"
                 android:layout_width="match_parent"
@@ -150,7 +145,6 @@
                 android:elevation="4dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- QR-код -->
             <TextView
                 android:id="@+id/itemQr"
                 android:layout_width="match_parent"
@@ -165,7 +159,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Кнопка внизу -->
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="0dp"

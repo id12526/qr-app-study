@@ -26,7 +26,6 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
@@ -34,18 +33,14 @@ class ProfileActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-
         currentUid = intent.getStringExtra("UID") ?: ""
         Log.d("ProfileActivity", "Текущий UID: $currentUid")
-
 
         binding.backButton.setOnClickListener {
             finish()
         }
 
-
         loadUserData()
-
 
         binding.editProfileButton.setOnClickListener {
             val intent = Intent(this, ProfileEditActivity::class.java).apply {
@@ -55,10 +50,14 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         binding.deleteAccountButton.setOnClickListener {
             showDeleteConfirmationDialog()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadUserData()
     }
 
     private fun loadUserData() {
@@ -70,7 +69,6 @@ class ProfileActivity : AppCompatActivity() {
                 middleName = snapshot.child("middleName").getValue(String::class.java)
                 login = snapshot.child("login").getValue(String::class.java)
                 avatarUrl = snapshot.child("avatarUrl").getValue(String::class.java)
-
                 binding.userName.text = "$lastName $firstName ${middleName ?: ""}".trim()
                 binding.userLogin.text = "@$login"
                 loadAvatar()

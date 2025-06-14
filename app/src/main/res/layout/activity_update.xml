@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Градиентный фон -->
     <View
         android:id="@+id/blue_background"
         android:layout_width="0dp"
@@ -26,7 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Верхняя панель с CardView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/top_card"
         android:layout_width="0dp"
@@ -88,7 +86,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Блок регистрации (белая подложка с тенью) -->
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"

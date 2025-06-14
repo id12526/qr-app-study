@@ -1,6 +1,5 @@
 package com.example.scaner
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,13 +7,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.scaner.databinding.ActivityProfileEditBinding
+import com.example.scaner.databinding.DialogEditTextBinding
 import com.google.firebase.database.*
 
 class ProfileEditActivity : AppCompatActivity() {
@@ -28,7 +28,6 @@ class ProfileEditActivity : AppCompatActivity() {
         binding = ActivityProfileEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Настройка цветов статус-бара и навигационной панели
         window.statusBarColor = resources.getColor(R.color.gradient_1, theme)
         window.navigationBarColor = resources.getColor(android.R.color.white, theme)
         window.decorView.systemUiVisibility = (
@@ -36,39 +35,15 @@ class ProfileEditActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        // Получение данных из Intent
         currentUid = intent.getStringExtra("UID") ?: ""
         avatarUrl = intent.getStringExtra("AVATAR_URL")
 
-        // Загрузка данных пользователя
         loadUserData()
 
-        // Настройка кнопки "Назад"
         binding.backButton.setOnClickListener {
             finish()
         }
 
-        // Скрытие клавиатуры при нажатии вне полей ввода
-        val rootLayout = findViewById<View>(R.id.root_layout)
-        rootLayout.setOnClickListener {
-            currentFocus?.let { view ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-                view.clearFocus()
-            }
-        }
-
-        // Загрузка аватарки
-        loadAvatar()
-
-        // Изменение аватарки
-        binding.changeAvatarButton.setOnClickListener {
-            showEditDialog("URL аватарки") { newAvatarUrl ->
-                updateAvatar(newAvatarUrl)
-            }
-        }
-
-        // Проверка логина на доступность
         binding.editLogin.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -76,36 +51,36 @@ class ProfileEditActivity : AppCompatActivity() {
                 if (login.isNotEmpty()) {
                     checkLoginAvailability(login)
                 } else {
-                    setLoginValidationIcon(false)
+                    clearLoginValidationIconWithDelay()
                 }
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Проверка пароля на соответствие требованиям
         binding.editPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
-                validatePassword(password)
+                if (password.isNotEmpty()) {
+                    validatePassword(password)
+                } else {
+                    clearPasswordValidationIconWithDelay()
+                }
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Сохранение изменений
         binding.saveButton.setOnClickListener {
             val newLogin = binding.editLogin.text.toString().trim()
             val newPassword = binding.editPassword.text.toString().trim()
             val firstName = binding.editFirstName.text.toString().trim()
             val lastName = binding.editLastName.text.toString().trim()
             val middleName = binding.editMiddleName.text.toString().trim()
-
             if (newLogin.isNotEmpty() && newPassword.isNotEmpty()) {
                 if (!isPasswordValid(newPassword)) {
                     Toast.makeText(this, "Пароль не соответствует требованиям", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-
                 val updatedData = mapOf(
                     "login" to newLogin,
                     "password" to newPassword,
@@ -113,12 +88,18 @@ class ProfileEditActivity : AppCompatActivity() {
                     "lastName" to lastName,
                     "middleName" to middleName
                 )
-
                 updateUserData(updatedData)
             } else {
                 Toast.makeText(this, "Заполните все обязательные поля", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.changeAvatarButton.setOnClickListener {
+            showEditDialog("URL аватарки") { newAvatarUrl ->
+                updateAvatar(newAvatarUrl)
+            }
+        }
+        loadAvatar()
     }
 
     private fun loadUserData() {
@@ -130,14 +111,11 @@ class ProfileEditActivity : AppCompatActivity() {
                 val firstName = snapshot.child("firstName").value.toString()
                 val lastName = snapshot.child("lastName").value.toString()
                 val middleName = snapshot.child("middleName").value.toString()
-
-                // Заполняем поля данными пользователя
                 binding.editLogin.setText(login)
                 binding.editPassword.setText(password)
                 binding.editFirstName.setText(firstName)
                 binding.editLastName.setText(lastName)
                 binding.editMiddleName.setText(middleName)
-
                 Log.d("ProfileEditActivity", "Данные пользователя загружены")
             } else {
                 Log.e("ProfileEditActivity", "Ошибка загрузки данных пользователя")
@@ -164,12 +142,13 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     private fun showEditDialog(field: String, onSave: (String) -> Unit) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Изменить $field")
-        val input = androidx.appcompat.widget.AppCompatEditText(this)
-        builder.setView(input)
+        val dialogBinding = DialogEditTextBinding.inflate(layoutInflater)
+        dialogBinding.dialogTitle.text = "Изменить $field"
+        dialogBinding.dialogInput.hint = "Введите $field"
+        val builder = AlertDialog.Builder(this, R.style.CustomDialogTheme)
+        builder.setView(dialogBinding.root)
         builder.setPositiveButton("Сохранить") { _, _ ->
-            val newValue = input.text.toString()
+            val newValue = dialogBinding.dialogInput.text.toString()
             if (newValue.isNotEmpty()) {
                 onSave(newValue)
             }
@@ -177,7 +156,9 @@ class ProfileEditActivity : AppCompatActivity() {
         builder.setNegativeButton("Отмена") { dialog, _ ->
             dialog.cancel()
         }
-        builder.show()
+        val dialog = builder.create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     private fun updateUserData(updatedData: Map<String, String>) {
@@ -207,14 +188,15 @@ class ProfileEditActivity : AppCompatActivity() {
             }
     }
 
+    private val handler = Handler(Looper.getMainLooper())
+    private var loginCheckRunnable: Runnable? = null
     private fun checkLoginAvailability(login: String) {
         if (login.isEmpty()) {
-            setLoginValidationIcon(false)
+            clearLoginValidationIconWithDelay()
             return
         }
-
-        val handler = Handler(Looper.getMainLooper())
-        val loginCheckRunnable = Runnable {
+        loginCheckRunnable?.let { handler.removeCallbacks(it) }
+        loginCheckRunnable = Runnable {
             databaseReference.orderByChild("login").equalTo(login).get()
                 .addOnSuccessListener { snapshot ->
                     val isAvailable = !snapshot.exists() || snapshot.children.firstOrNull()?.key == currentUid
@@ -224,8 +206,7 @@ class ProfileEditActivity : AppCompatActivity() {
                     Toast.makeText(this, "Ошибка проверки логина", Toast.LENGTH_SHORT).show()
                 }
         }
-
-        handler.postDelayed(loginCheckRunnable, 300)
+        handler.postDelayed(loginCheckRunnable!!, 300)
     }
 
     private fun setLoginValidationIcon(isValid: Boolean) {
@@ -237,6 +218,28 @@ class ProfileEditActivity : AppCompatActivity() {
             drawable,
             null
         )
+        if (!isValid) {
+            TooltipCompat.setTooltipText(
+                binding.editLogin,
+                "Логин уже используется другим пользователем"
+            )
+        } else {
+            TooltipCompat.setTooltipText(binding.editLogin, null)
+        }
+    }
+
+    private fun clearLoginValidationIconWithDelay() {
+        loginCheckRunnable?.let { handler.removeCallbacks(it) }
+        loginCheckRunnable = Runnable {
+            binding.editLogin.setCompoundDrawablesWithIntrinsicBounds(
+                binding.editLogin.compoundDrawables[0],
+                null,
+                null,
+                null
+            )
+            TooltipCompat.setTooltipText(binding.editLogin, null)
+        }
+        handler.postDelayed(loginCheckRunnable!!, 300)
     }
 
     private fun validatePassword(password: String) {
@@ -245,7 +248,6 @@ class ProfileEditActivity : AppCompatActivity() {
         val hasSpecialChar = password.any { !it.isLetterOrDigit() }
         val isLengthValid = password.length >= 8
         val isValid = hasUppercase && hasDigit && hasSpecialChar && isLengthValid
-
         val drawableRes = if (isValid) R.drawable.ic_check_done else R.drawable.ic_check_wrong
         val drawable = ContextCompat.getDrawable(this, drawableRes)?.mutate()
         binding.editPassword.setCompoundDrawablesWithIntrinsicBounds(
@@ -254,6 +256,26 @@ class ProfileEditActivity : AppCompatActivity() {
             drawable,
             null
         )
+        if (!isValid) {
+            TooltipCompat.setTooltipText(
+                binding.editPassword,
+                "Пароль должен состоять из 8 символов и включать в себя цифры, буквы, один спецсимвол и одну букву с заглавной"
+            )
+        } else {
+            TooltipCompat.setTooltipText(binding.editPassword, null)
+        }
+    }
+
+    private fun clearPasswordValidationIconWithDelay() {
+        handler.postDelayed({
+            binding.editPassword.setCompoundDrawablesWithIntrinsicBounds(
+                binding.editPassword.compoundDrawables[0],
+                null,
+                null,
+                null
+            )
+            TooltipCompat.setTooltipText(binding.editPassword, null)
+        }, 300)
     }
 
     private fun isPasswordValid(password: String): Boolean {

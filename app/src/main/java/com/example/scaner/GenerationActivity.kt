@@ -6,8 +6,6 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.graphics.drawable.toBitmap
 import com.google.zxing.BarcodeFormat
@@ -39,13 +37,11 @@ class GenerationActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                 )
 
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
-        val rootLayout = findViewById<View>(R.id.root_layout)
-        rootLayout.setOnClickListener {
+        binding.rootLayout.setOnClickListener {
             currentFocus?.let { view ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -53,8 +49,7 @@ class GenerationActivity : AppCompatActivity() {
             }
         }
 
-        val generateButton = findViewById<Button>(R.id.generateButton)
-        generateButton.setOnClickListener {
+        binding.generateButton.setOnClickListener {
             generateQRCode()
         }
 
@@ -70,12 +65,10 @@ class GenerationActivity : AppCompatActivity() {
 
     private fun generateQRCode() {
         val qrText = binding.qrText.text.toString().trim()
-
         if (qrText.isEmpty()) {
             Toast.makeText(this, "Введите текст для QR-кода", Toast.LENGTH_SHORT).show()
             return
         }
-
         val qrCodeBitmap = generateQRCodeBitmap(qrText, 500, 500)
         if (qrCodeBitmap != null) {
             binding.qrCodeImageView.setImageBitmap(qrCodeBitmap)
@@ -91,7 +84,6 @@ class GenerationActivity : AppCompatActivity() {
         val hints = Hashtable<EncodeHintType, Any>()
         hints[EncodeHintType.CHARACTER_SET] = "UTF-8"
         hints[EncodeHintType.MARGIN] = 1
-
         try {
             val bitMatrix: BitMatrix = MultiFormatWriter().encode(
                 text,
@@ -100,7 +92,6 @@ class GenerationActivity : AppCompatActivity() {
                 height,
                 hints
             )
-
             val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
             for (x in 0 until width) {
                 for (y in 0 until height) {
@@ -121,10 +112,8 @@ class GenerationActivity : AppCompatActivity() {
             put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
             put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
         }
-
         val resolver = contentResolver
         val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
         try {
             uri?.let {
                 val outputStream = resolver.openOutputStream(it)
@@ -139,7 +128,6 @@ class GenerationActivity : AppCompatActivity() {
             Toast.makeText(this, "Ошибка при сохранении QR-кода", Toast.LENGTH_SHORT).show()
         }
     }
-
     companion object {
         private const val SAVE_QR_CODE_REQUEST_CODE = 1001
         private var tempFilePath: String? = null
@@ -147,17 +135,14 @@ class GenerationActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == SAVE_QR_CODE_REQUEST_CODE && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 try {
                     val inputStream = FileInputStream(File(tempFilePath))
                     val outputStream = contentResolver.openOutputStream(uri)
-
                     inputStream.copyTo(outputStream!!)
                     inputStream.close()
                     outputStream.close()
-
                     Toast.makeText(this, "QR-код успешно сохранен", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     e.printStackTrace()

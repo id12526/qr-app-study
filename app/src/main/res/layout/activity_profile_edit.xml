@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
@@ -7,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Градиентный фон -->
     <View
         android:id="@+id/blue_background"
         android:layout_width="0dp"
@@ -26,7 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Верхняя панель с CardView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/top_card"
         android:layout_width="0dp"
@@ -111,15 +110,12 @@
             android:clipChildren="false"
             android:padding="20dp">
 
-
-            <!-- Аватарка -->
             <FrameLayout
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:elevation="4dp"
                 android:layout_marginBottom="15dp">
 
-                <!-- Основное изображение аватарки -->
                 <ImageView
                     android:id="@+id/avatar_image"
                     android:layout_width="match_parent"
@@ -174,7 +170,6 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Поле для пароля -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -199,7 +194,6 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Поле для имени -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,7 +217,6 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Поле для фамилии -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -247,7 +240,6 @@
                 android:stateListAnimator="@animator/edittext_focus_animator"
                 android:textColor="@color/black" />
 
-            <!-- Поле для отчества -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
